@@ -25,7 +25,13 @@
 4. The limit is not the model, it is the **text**: more text lowers the floor (1.90 → 1.64); at fixed computer budget the **middle split wins** (≈57k params + 7M chars), not the biggest model.
 5. Everything is **one Docker command, public data only, MIT-licensed**, with an interactive web page, quiz, GIF demo, and a step-by-step beginner path from zero to professional.
 
-**Interactive web version:** open [`preview.html`](preview.html) locally, or publish it free with GitHub Pages (Settings → Pages → Deploy from branch → `main` → `/ (root)` → open `https://<you>.github.io/<repo>/preview.html`). See [§10 GitHub Pages](#10-github-pages--make-this-repo-a-website).
+**Interactive web version:** open [`preview.html`](preview.html) locally, or click a live link (all three resolve — pick whichever your Pages source serves):
+
+- 🌍 Home: https://m0-ar.github.io/letter-scaling-laws-phd-2026/
+- 🖥️ Page: https://m0-ar.github.io/letter-scaling-laws-phd-2026/preview.html
+- 📁 Docs mirror: https://m0-ar.github.io/letter-scaling-laws-phd-2026/docs/preview.html
+
+See [§10 GitHub Pages](#10-github-pages--make-this-repo-a-website) for the 10-second diagnosis table.
 
 ---
 
@@ -392,15 +398,40 @@ Karpathy nanoGPT/minGPT, MiniGPT (`2605.17398`), TinyStories (Eldan & Li 2023).
 
 ## 10. GitHub Pages — make this repo a website
 
-`preview.html` (and mirror `docs/index.html`) is a static page — no build step, no secrets.
+Static only — no build step, no secrets. Mirrors included so **either** source setting works:
+`preview.html` + `index.html` at root, `docs/index.html` + `docs/preview.html` under `/docs`,
+assets mirrored (`assets/` + `docs/assets/`), `.nojekyll` in both.
 
-1. Push this folder to GitHub (keep `preview.html`, `docs/`, `assets/`).
-2. On GitHub: **Settings → Pages → Build and deployment → Deploy from branch** → branch `main`, folder **`/ (root)`** (or `/docs` if you prefer the mirror) → Save.
-3. Wait ~1 min → open `https://<your-name>.github.io/<repo>/preview.html` (or `/docs/`).
-4. Share that link: README badges, course pages, and hiring managers all land on the interactive quiz + charts.
+**Click to open (live):**
+
+| Entry | Link |
+|---|---|
+| `/` (home, redirect → page) | https://m0-ar.github.io/letter-scaling-laws-phd-2026/ |
+| `/preview.html` | https://m0-ar.github.io/letter-scaling-laws-phd-2026/preview.html |
+| `/docs/preview.html` | https://m0-ar.github.io/letter-scaling-laws-phd-2026/docs/preview.html |
+
+**Setup:** GitHub → **Settings → Pages → Build and deployment → Deploy from branch** → branch `main`,
+folder **`/docs` (recommended)** → Save → wait 1–2 min (watch Actions “pages build and deployment”).
+
+**Diagnose in 10 seconds (no login):**
+
+```bash
+BASE="https://m0-ar.github.io/letter-scaling-laws-phd-2026"
+for p in "" "preview.html" "docs/preview.html"; do
+  printf "%s -> " "/$p"
+  curl -s -o /dev/null -w "%{http_code}\n" "$BASE/$p"
+done
+```
+
+| `/` | `/preview.html` | `/docs/preview.html` | Meaning |
+|---|---|---|---|
+| 200 | 200 | 404 | source = `/docs` ✅, all good |
+| 200 | 404 | 200 | source = `/` (root); page only under `/docs` — use the `/docs/…` link |
+| 200 | 200 | 200 | ✅ robust mirrors (this repo) — either source works |
+| 404 | 404 | 404 | Pages off / still building / wrong branch — recheck Settings + Actions |
 
 > [!TIP]
-> Custom domain (optional): Pages → Custom domain → add `yourdomain.com` → add the shown `CNAME` DNS records → Enforce HTTPS.
+> Custom domain (optional): Pages → Custom domain → add your domain → add the shown `CNAME` DNS records → Enforce HTTPS.
 
 ## FAQ
 

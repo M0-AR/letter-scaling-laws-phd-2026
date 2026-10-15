@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letter-Guesser Scaling Laws — Interactive Preview</title>
+<style>
+:root{--bg:#0f1226;--card:#1a1f3d;--acc:#7c6cff;--acc2:#2dd4bf;--txt:#eef0ff;--mut:#aab0d5}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#0f1226,#0b0e20);color:var(--txt)}
+header{padding:48px 20px;text-align:center;background:radial-gradient(600px 300px at 50% 0%,#2a2f6b,transparent)}
+h1{font-size:clamp(28px,5vw,52px);margin:0 0 8px}.tag{color:var(--mut);max-width:760px;margin:0 auto 16px;font-size:17px}
+.badges img{margin:3px}.btn{display:inline-block;background:var(--acc);color:#fff;padding:12px 22px;border-radius:12px;text-decoration:none;font-weight:700;margin:6px}.btn.ghost{background:transparent;border:1px solid var(--acc)}
+.wrap{max-width:1020px;margin:0 auto;padding:20px}nav.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+nav.tabs button{background:var(--card);color:var(--txt);border:1px solid #2c3468;padding:10px 18px;border-radius:999px;cursor:pointer;font-weight:700}
+nav.tabs button.active{background:var(--acc)}section.card{background:var(--card);border:1px solid #2c3468;border-radius:18px;padding:24px;margin:16px 0;display:none}section.card.show{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+img.fig{width:100%;border-radius:12px;border:1px solid #2c3468;background:#fff}
+.kpi{background:#12163a;border:1px solid #2c3468;border-radius:14px;padding:14px;text-align:center}.kpi b{font-size:26px;color:var(--acc2)}
+input[type=range]{width:100%}.q{border:1px solid #2c3468;border-radius:12px;padding:14px;margin:10px 0}.q button{margin:4px 8px 4px 0;padding:8px 14px;border-radius:10px;border:1px solid var(--acc);background:transparent;color:var(--txt);cursor:pointer}.q button:hover{background:var(--acc)}.ok{color:#4ade80;font-weight:700}.bad{color:#f87171;font-weight:700}
+footer{text-align:center;color:var(--mut);padding:30px;font-size:13px}code{background:#0b0e20;padding:2px 6px;border-radius:6px}
+details{background:#12163a;border-radius:12px;padding:12px 16px;margin:8px 0}
+</style>
+</head>
+<body>
+<header>
+<h1>🔤 Letter-Guesser Scaling Laws</h1>
+<p class="tag">Predict how good a bigger AI will be — <b>before you pay to build it</b>. Tiny letters, laptop scale, live public data. MIT-licensed, one Docker command.</p>
+<div class="badges">
+<img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT">
+<img src="https://img.shields.io/badge/python-3.11-blue.svg" alt="python">
+<img src="https://img.shields.io/badge/tests-5_passed-brightgreen.svg" alt="tests">
+<img src="https://img.shields.io/badge/preview-interactive-blueviolet.svg" alt="preview">
+</div>
+<div>
+<a class="btn" href="#learn" onclick="tab('learn')">🌱 Start beginner path</a>
+<a class="btn ghost" href="#quiz" onclick="tab('quiz')">📝 Take the quiz</a>
+<a class="btn ghost" href="https://github.com/" target="_blank">⭐ Star on GitHub</a>
+</div>
+</header>
+<div class="wrap">
+<nav class="tabs">
+<button id="b-learn" class="active" onclick="tab('learn')">🌱 Learn 0→Pro</button>
+<button id="b-charts" onclick="tab('charts')">📊 Charts + Playground</button>
+<button id="b-quiz" onclick="tab('quiz')">📝 Quiz (graded)</button>
+<button id="b-run" onclick="tab('run')">🚀 Run it yourself</button>
+</nav>
+
+<section id="learn" class="card show">
+<h2>🌱 Beginner guide — 7 steps, 10 minutes</h2>
+<p><b>Let's work this out in a step-by-step way to be sure we have the right answer.</b></p>
+<details open><summary><b>Step 0 — the game</b></summary>
+I show you <code>the&nbsp;</code>. Which letter is next? Give <b>all 27 letters a chance %</b> (a–z + space = 100).
+<code>othe</code> → almost all on <code>r</code>. After a space → spread out. That spreader is a <b>language model</b>.</details>
+<details><summary><b>Step 1 — the score (bits)</b></summary>
+Halve from 100% to the true letter's chance and count: 50%→1, 25%→2, 90%→0.15 bits. Average = <b>bits/letter</b> (lower better).
+Anchors: <b>4.75</b> knowing nothing · <b>4.12</b> knowing frequencies · <b>~4.76</b> fresh random net.</details>
+<details><summary><b>Step 2 — the box</b></summary>
+Only a <b>list of numbers</b> inside (496 → 3.5M). Learning nudges each so true letters get more chance. One pass over text (~8 novels for 4M chars).</details>
+<details><summary><b>Step 3 — bigger wins, gains shrink</b></summary>
+Sizes ×4 each step: <b>3.61 → … → 2.14</b>. First step +0.4, later &lt;0.1. Naive "×0.89 each step" fails (0.89→0.91→0.93).</details>
+<details><summary><b>Step 4 — the floor trick ⭐</b></summary>
+Scores level above a <b>floor (~1.90)</b>. Measure <b>gap = score − floor</b>: 4× size leaves <b>~0.72</b> of gap, every step.
+Straight line on log paper = <b>power law</b>. Fit on 5 smallest → predict 3 biggest (35×) within <b>0.006 bits</b>.</details>
+<details><summary><b>Step 5 — floor = text, not model</b></summary>
+More text lowers floor: 1.90 (4M) → 1.73 (16M) → 1.64 (64M). Formula: <b>score = 1.56 + size-part + text-part</b>.
+4× size keeps 0.71 of its part, 4× text keeps 0.50. Cost ≈ <b>6 × params × chars</b>.</details>
+<details><summary><b>Step 6 — fixed budget: middle wins</b></summary>
+Same computer, five splits: huge+short 3.45 · tiny+long 2.66 · <b>middle (57k + 7M) 2.38 wins</b>.
+10× budget → model ×5, text ×2. Each training must plan its own schedule or short runs look 0.13 worse.</details>
+<div class="grid2">
+<div class="kpi"><b>0.72</b><br>gap kept per 4× size</div>
+<div class="kpi"><b>0.006</b><br>bits forecast error (35×)</div>
+<div class="kpi"><b>57k + 7M</b><br>best split at this budget</div>
+<div class="kpi"><b>5 min</b><br>CPU to reproduce (fast)</div>
+</div>
+</section>
+
+<section id="charts" class="card">
+<h2>📊 Verified charts + playground</h2>
+<p>Numbers below are the repo's machine outputs (<code>results/paper_fits.json</code>).</p>
+<div class="grid2">
+<div><h3>Straight line = power law</h3><img class="fig" src="assets/scaling_curve.png" alt="log-log scaling curve"></div>
+<div><h3>Forecast 35× ahead</h3><img class="fig" src="assets/forecast.png" alt="forecast"></div>
+</div>
+<div><h3>Same budget: middle wins</h3><img class="fig" src="assets/isofLOP.png" alt="isofLOP"></div>
+<h3>🎛️ Playground — drag model size, see predicted score</h3>
+<input id="nslider" type="range" min="2.7" max="6.55" step="0.01" value="5" oninput="play()">
+<p>Params: <b id="nval">100,000</b> → predicted <b id="lval">2.40 bits</b> <span style="color:var(--mut)">(L = 1.90 + e^2.089 · N^−0.242)</span></p>
+<script>
+function play(){const e=Math.exp(2.08868),k=-0.24162,f=1.9;const N=Math.pow(10,parseFloat(document.getElementById('nslider').value));
+document.getElementById('nval').textContent=Math.round(N).toLocaleString();
+document.getElementById('lval').textContent=(f+e*Math.pow(N,k)).toFixed(2)+' bits';}play();
+function tab(id){document.querySelectorAll('section.card').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));document.getElementById('b-'+id).classList.add('active');window.scrollTo({top:200,behavior:'smooth'});}
+</script>
+</section>
+
+<section id="quiz" class="card">
+<h2>📝 Quiz — zero to pro (auto-graded)</h2>
+<p id="score">Score: 0 / 6</p>
+<div class="q" id="q1"><b>1. Knowing nothing, the score is…</b><br>
+<button onclick="ans(1,false,this)">4.12</button><button onclick="ans(1,true,this)">4.75 (log₂27)</button><button onclick="ans(1,false,this)">1.90</button><span></span></div>
+<div class="q" id="q2"><b>2. 4× bigger keeps how much of the gap?</b><br>
+<button onclick="ans(2,false,this)">~0.89</button><button onclick="ans(2,true,this)">~0.72</button><button onclick="ans(2,false,this)">~0.50</button><span></span></div>
+<div class="q" id="q3"><b>3. 10× bigger keeps…</b><br>
+<button onclick="ans(3,true,this)">~57–60%</button><button onclick="ans(3,false,this)">~89%</button><button onclick="ans(3,false,this)">~10%</button><span></span></div>
+<div class="q" id="q4"><b>4. Why does the floor fall with more text?</b><br>
+<button onclick="ans(4,false,this)">Models get deeper</button><button onclick="ans(4,true,this)">Floor = what text can teach, not model limit</button><button onclick="ans(4,false,this)">Learning rate rises</button><span></span></div>
+<div class="q" id="q5"><b>5. Fixed computer: which wins?</b><br>
+<button onclick="ans(5,false,this)">Biggest model, tiny text</button><button onclick="ans(5,true,this)">Middle split (~57k + 7M here)</button><button onclick="ans(5,false,this)">Tiniest model, huge text</button><span></span></div>
+<div class="q" id="q6"><b>6. Short run read "on the way" vs planned for its length?</b><br>
+<button onclick="ans(6,true,this)">Looks ~0.13 worse (unsettled steps)</button><button onclick="ans(6,false,this)">Looks identical</button><button onclick="ans(6,false,this)">Looks better</button><span></span></div>
+<script>
+let sc=0, done={};
+function ans(q,ok,btn){if(done[q])return;done[q]=1;const s=btn.parentElement.querySelector('span');
+if(ok){sc++;s.innerHTML=' <span class="ok">✓ correct</span>';btn.style.background='#166534';}else{s.innerHTML=' <span class="bad">✗ try Learn tab step '+(q+1)+'</span>';btn.style.background='#7f1d1d';}
+document.getElementById('score').textContent='Score: '+sc+' / 6'+(sc===6?' — 🎓 Pro! You beat most interview answers.':'');}
+</script>
+<p style="color:var(--mut)">Explanations: Q1 log₂27 · Q2 fitted per-4× 0.715 · Q3 10^slope ≈ 0.57 · Q4 floors 1.90→1.64 with text · Q5 IsoFLOP U-curve · Q6 schedule bias.</p>
+</section>
+
+<section id="run" class="card">
+<h2>🚀 Run it yourself (3 commands)</h2>
+<pre><code>docker compose up --build
+# or:
+pip install -r requirements.txt
+PYTHONPATH=. python scripts/run_study.py --mode fast
+PYTHONPATH=. pytest tests -v   # 5 passed</code></pre>
+<h3>Who is this for?</h3>
+<ul>
+<li>🎓 <b>Students</b> — afternoon CPU path from letters to Chinchilla intuition.</li>
+<li>💼 <b>Candidates</b> — "power law with data floor; fit small, forecast large; IsoFLOP middle wins."</li>
+<li>🔬 <b>Researchers</b> — clean N/D/C benchmark to fork (tokenizer, μP, finance ladders).</li>
+<li>👩‍🏫 <b>Teachers</b> — live Wikipedia demo + GIF + quiz.</li>
+<li>📈 <b>Practitioners</b> — same engine on discretized returns (method portability).</li>
+</ul>
+<h3>Publish this page free (GitHub Pages)</h3>
+<ol>
+<li>Push repo (keep <code>preview.html</code>, <code>docs/</code>, <code>assets/</code>).</li>
+<li>GitHub → <b>Settings → Pages → Deploy from branch</b> → branch <code>main</code>, folder <code>/ (root)</code> → Save.</li>
+<li>Open <code>https://&lt;you&gt;.github.io/&lt;repo&gt;/preview.html</code>. Optional: add custom domain + Enforce HTTPS.</li>
+</ol>
+<h3>Files</h3>
+<p><code>src/</code> model+data+train+scaling+market · <code>scripts/run_study.py</code> · <code>scripts/make_assets.py</code> · <code>results/*.json</code> (truth) · <code>assets/demo.gif</code> · <code>tests/</code> · <code>LICENSE</code> (MIT).</p>
+</section>
+</div>
+<footer>Letter-Guesser Scaling Laws · MIT · All charts from <code>results/paper_fits.json</code> — JSON wins over prose. If numbers disagree, file an issue.</footer>
+</body>
+</html>
