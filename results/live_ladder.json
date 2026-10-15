@@ -1,0 +1,46 @@
+[
+  {
+    "baseline_uniform": 4.754887502163468,
+    "baseline_unigram": 4.488910170707958
+  },
+  {
+    "n_params": 1800,
+    "cfg": {
+      "d_model": 8,
+      "n_layer": 1,
+      "n_head": 2
+    },
+    "bits": 4.485233753442817,
+    "sample": "the eaqve vzyjltp bpeck betymjdge iiqminlozeu vskbshei q qi r rdfjwt a eqnodw hhfbxmbuycik wef d peqvbecj wbh f  ye i epdzez"
+  },
+  {
+    "n_params": 5112,
+    "cfg": {
+      "d_model": 12,
+      "n_layer": 2,
+      "n_head": 2
+    },
+    "bits": 4.491532074073864,
+    "sample": "the eaqve vzyjltdxbpcck betymjdgy ii minlozeu vskbshei q qi r rdrv t a eqnodw hsfbxmb ycik wef d peqvbecj wbh f  ye i epdnez"
+  },
+  {
+    "n_params": 17136,
+    "cfg": {
+      "d_model": 24,
+      "n_layer": 2,
+      "n_head": 4
+    },
+    "bits": 4.501820855856999,
+    "sample": "the eaqve vzyjltptbptck betempdge ii minlozeu vskbshei q qi r rdfv t a eqnodw hsfbxmvuycik wef d peqvbecj wbh f  ye i epdnez"
+  },
+  {
+    "n_params": 28992,
+    "cfg": {
+      "d_model": 32,
+      "n_layer": 2,
+      "n_head": 4
+    },
+    "bits": 4.511770153477506,
+    "sample": "the eaqve vzyjltdxbpcck tetymjdge ii minlozeu vskbshei q qi r rdrv t a eqnodw hsfbxmvuyciw wgf d peqvbetjmvbh f  ye i epdnez"
+  }
+]

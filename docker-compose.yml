@@ -1,0 +1,18 @@
+services:
+  study-cpu:
+    build: .
+    volumes:
+      - ./results:/work/results
+      - ./data:/work/data
+    command: python scripts/run_study.py --mode fast
+  study-full:
+    build: .
+    profiles: ["full"]
+    volumes:
+      - ./results:/work/results
+      - ./data:/work/data
+    command: python scripts/run_study.py --mode full
+  tests:
+    build: .
+    profiles: ["test"]
+    command: pytest tests -v
